@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Grateful Dead Trivia</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="container main-container">
+  <div class="row">
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10 question-answer">
+      <table id="question-table" class="table table-bordered">
+        <tbody>
+        <tr>
+          <td>
+            <h1 id="main-banner">Grateful Dead Trivia</h1>
+          </td>
+        </tr>
+        <tr id="start-banner-area" class="awaiting-start">
+          <td>
+            <h1 class="text-center">Click to Start</h3>
+          </td>
+        </tr>
+        <tr class="active-game">
+          <td id="countdown-timer-area">
+            <h3 class="text-center">Time Remaining: <span id="time-remaining">7</span> Seconds</h3>
+          </td>
+        </tr>
+        <tr class="active-game">
+          <td><h3 id="question-text" class="text-left"></h3></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row active-game">
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10 question-answer">
+      <table id="answer-table" class="table table-hover table-select table-bordered">
+        <tbody>
+        <tr class="clickable-row">
+          <td id="answer-0" class="answer"></td>
+        </tr>
+        <tr class="clickable-row">
+          <td id="answer-1" class="answer"></td>
+        </tr>
+        <tr class="clickable-row">
+          <td id="answer-2" class="answer"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-1"></div>
+  </div>
+
+  <div class="row active-game">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10 question-answer">
+      <table id="submit-table" class="table">
+        <tbody>
+        <tr id="submit">
+          <td>
+            <button class="btn btn-lg">Submit Answer</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-1"></div>
+  </div>
+
+  <div class="row active-game">
+    <div class="col-lg-1"></div>
+
+    <div class="col-lg-10 question-answer">
+      <table id="result-table" class="table table-bordered">
+        <tbody>
+
+        <tr>
+          <td>
+            <div id="result-area">
+            </div>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script src="assets/javascript/app.js"></script>
+</body>
+</html>
