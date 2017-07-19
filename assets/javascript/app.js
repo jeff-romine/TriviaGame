@@ -1,25 +1,19 @@
 $(document).ready(function () {
 
-  $('#answer-table').on('click', '.clickable-row', function (event) {
-    console.log("event", event);
-    $(this).addClass('active').siblings().removeClass('active');
-  });
-
-
   var questions = [
     {
       timeLimitInSeconds: 10,
       questionText: "Who was the only female member of the Grateful Dead?",
       answers: ["Linda Ronstadt", "Donna Jean Godchaux", "Janis Joplin"],
       correctAnswer: "Donna Jean Godchaux",
-      explanationText: "Donna Jead Godchaux provided back-up and lead vocals for the band from 1971 to 1979."
+      explanationText: "Donna Jean Godchaux provided back-up and lead vocals for the band from 1971 to 1979."
     },
     {
-      timeLimitInSeconds: 10,
-      questionText: "Who was the only female member of the Grateful Dead?",
-      answers: ["Linda Ronstadt", "Donna Jean Godchaux", "Janis Joplin"],
-      correctAnswer: "Donna Jean Godchaux",
-      explanationText: "Donna Jead Godchaux provided back-up and lead vocals for the band from 1971 to 1979."
+      timeLimitInSeconds: 15,
+      questionText: "Jerry's last name is what?",
+      answers: ["Garcia", "Godchaux", "Weir"],
+      correctAnswer: "Garcia",
+      explanationText: "Donna Jean Godchaux provided back-up and lead vocals for the band from 1971 to 1979."
     }
   ];
 
@@ -30,6 +24,7 @@ $(document).ready(function () {
   var timeLimitInSeconds;
   var questionActive;
   var selectedAnswer;
+  var currentQuestion;
 
   function sAwaitingStart(event) {
     $(".awaiting-start").hide();
@@ -63,21 +58,19 @@ $(document).ready(function () {
   }
 
   function tShowQuestionResults() {
-    var question = questions[questionIndex];
-
-    if (selectedAnswer === question.correctAnswer) {
+    if (selectedAnswer === currentQuestion.correctAnswer) {
       $("#result-area").append($("<h1>").text("Correct!"));
     }
     else {
       $("#result-area").append($("<h1>").text("Incorrect!"));
     }
 
-    $("#result-area").append($("<p>").html($("<h3>").text(question.explanationText)));
+    $("#result-area").append($("<p>").html($("<h3>").text(currentQuestion.explanationText)));
 
     return sWaitForNext;
   }
 
-  function tTimeout() {
+  function tSubmit() {
     questionActive=false;
     return tShowQuestionResults();
   }
@@ -85,7 +78,7 @@ $(document).ready(function () {
   function intervalHandler() {
     if (questionActive) {
       if (timeLimitInSeconds <= 0) {
-        state = tTimeout();
+        state = tSubmit();
       }
       else {
         timeLimitInSeconds--;
@@ -99,16 +92,18 @@ $(document).ready(function () {
       return tGameOver();
     }
     else {
-      var question = questions[questionIndex++];
-      var answers = question.answers;
+      currentQuestion = questions[questionIndex++];
+      var answers = currentQuestion.answers;
 
-      $("#question-text").text(question.questionText);
+      $("#question-text")
+        .text(currentQuestion.questionText);
 
       answers.forEach((answer, index) => {
         $("#answer-" + index).text(answer);
+        $("#answer").parent().attr("data-answer",answer);
       });
 
-      timeLimitInSeconds = question.timeLimitInSeconds;
+      timeLimitInSeconds = currentQuestion.timeLimitInSeconds;
       refreshTimeLimit();
 
       $("#result-area").text("");
@@ -118,9 +113,28 @@ $(document).ready(function () {
     }
   }
 
-  function clickHandler(event) {
-    state=state(event);
+  $('#answer-table').on('click', '.clickable-row', function (event) {
+    console.log("event", event);
+
+    selectedAnswer=$(this).attr("data-answer");
+    $(this).addClass('active').siblings().removeClass('active');
+  });
+
+  function handleSubmit(event) {
+    console.log("event: ",event);
+    state=tSubmit();
   }
+
+  $('#submit-answer').click(handleSubmit);
+
+  $('#start-button').click((event) => {
+    state = state(event);
+    });
+
+  function clickHandler(event) {
+    console.log("clickHandler(",event,")");
+  }
+
 
   $("body").click(clickHandler);
 
