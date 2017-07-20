@@ -42,6 +42,14 @@
         <tr class="active-game">
           <td><h3 id="question-text" class="text-left"></h3></td>
         </tr>
+        <tr class="game-over">
+          <td>
+            <h3 class="text-center stat col-lg-4" style="width:30%">Questions: <span id="stat-number-of-questions"></span></h3>
+            <h3 class="text-center stat col-lg-4" style="width:30%">Correct: <span id="stat-correct-answers"></span></h3>
+            <h3 class="text-center stat col-lg-4" style="width:30%">Score: <span id="stat-percent-correct"></span>%</h3>
+          </td>
+        </tr>
+
         </tbody>
       </table>
     </div>
@@ -75,7 +83,7 @@
         <tbody>
         <tr id="submit">
           <td>
-            <button id="submit-answer" class="btn btn-lg">Submit Answer</button>
+            <button id="submit-or-next" class="btn btn-lg">Submit Answer</button>
           </td>
         </tr>
         </tbody>

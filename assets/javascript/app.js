@@ -25,6 +25,7 @@ $(document).ready(function () {
   var questionActive;
   var selectedAnswer;
   var currentQuestion;
+  var correctAnswers;
 
   function sAwaitingStart(event) {
     $(".awaiting-start").hide();
@@ -44,6 +45,13 @@ $(document).ready(function () {
   }
 
   function tGameOver() {
+
+    $(".active-game").hide();
+
+    $("#stat-number-of-questions").text(questions.length.toString());
+    $("#stat-correct-answers").text(correctAnswers.toString());
+    $("#stat-percent-correct").text(Math.round((correctAnswers/questions.length) * 100).toString());
+    $(".game-over").show();
     /* display game results */
     /* wait for start over */
     return sWaitForRestart;
@@ -59,14 +67,26 @@ $(document).ready(function () {
 
   function tShowQuestionResults() {
     if (selectedAnswer === currentQuestion.correctAnswer) {
+      correctAnswers++;
       $("#result-area").append($("<h1>").text("Correct!"));
     }
     else {
       $("#result-area").append($("<h1>").text("Incorrect!"));
     }
 
-    $("#result-area").append($("<p>").html($("<h3>").text(currentQuestion.explanationText)));
+    $("#result-area").append(
+      $("<p>")
+        .html($("<h3>")
+          .attr("id","explanation-text")
+          .addClass("text-left")
+          .text(currentQuestion.explanationText)));
 
+    if (questionIndex < questions.length) {
+      setSubmitOrNext("next","Next Question");
+    }
+    else {
+      setSubmitOrNext("next","Game Results");
+    }
     return sWaitForNext;
   }
 
@@ -87,6 +107,11 @@ $(document).ready(function () {
     }
   }
 
+  function setSubmitOrNext(action,label) {
+    var button = $("#submit-or-next");
+    button.attr("data-action",action).text(label);
+  }
+
   function tNextQuestion() {
     if (questionIndex >= questions.length) {
       return tGameOver();
@@ -99,8 +124,11 @@ $(document).ready(function () {
         .text(currentQuestion.questionText);
 
       answers.forEach((answer, index) => {
-        $("#answer-" + index).text(answer);
-        $("#answer").parent().attr("data-answer",answer);
+        var answerTd = $("#answer-" + index);
+        answerTd.html($("<h4>").text(answer));
+        // The parent .clickable-row is the event context so
+        // it is convenient to have the answer text here
+        answerTd.parent().attr("data-answer",answer);
       });
 
       timeLimitInSeconds = currentQuestion.timeLimitInSeconds;
@@ -109,23 +137,36 @@ $(document).ready(function () {
       $("#result-area").text("");
       questionActive=true;
 
+      setSubmitOrNext("submit","Submit Answer");
+
+      $(".clickable-row").removeClass('active');
+
       return sWaitForAnswer;
     }
   }
 
   $('#answer-table').on('click', '.clickable-row', function (event) {
     console.log("event", event);
-
-    selectedAnswer=$(this).attr("data-answer");
-    $(this).addClass('active').siblings().removeClass('active');
+    if (questionActive) {
+      selectedAnswer=$(this).attr("data-answer");
+      $(this).addClass('active').siblings().removeClass('active');
+    }
   });
 
-  function handleSubmit(event) {
+  function handleSubmitOrNext(event) {
     console.log("event: ",event);
-    state=tSubmit();
+
+    var action = $(event.target).attr("data-action");
+
+    if (action === "next") {
+      state=tNextQuestion();
+    }
+    else {
+      state=tSubmit();
+    }
   }
 
-  $('#submit-answer').click(handleSubmit);
+  $('#submit-or-next').click(handleSubmitOrNext);
 
   $('#start-button').click((event) => {
     state = state(event);
@@ -135,21 +176,21 @@ $(document).ready(function () {
     console.log("clickHandler(",event,")");
   }
 
-
   $("body").click(clickHandler);
 
   function init() {
 
     $(".active-game").hide();
+    $(".game-over").hide();
     $(".init").show();
     started = false;
     questionIndex=0;
     questionActive=false;
+    correctAnswers=0;
 
     state=sAwaitingStart;
 
     setInterval(intervalHandler,1000);
-
   }
 
   init();

@@ -129,6 +129,17 @@ height: 200px;
     padding-left: 1em;
     padding-right: 1em;
 }
+
+#explanation-text {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+#question-text,
+#explanation-text {
+    color: #fe5c35;
+}
+
 /*.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {*/
     /*background-color: #color;*/
 /*}*/
