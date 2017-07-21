@@ -32,6 +32,7 @@ $(document).ready(function () {
   var selectedAnswer;
   var currentQuestion;
   var correctAnswers;
+  var intervalId;
 
   function sAwaitingStart(event) {
     $(".awaiting-start").hide();
@@ -195,10 +196,12 @@ $(document).ready(function () {
     currentQuestion=undefined;
 
 
-    clearInterval(intervalHandler);
-    setInterval(intervalHandler,1000);
     $('#start-button').unbind("click",startButtonHandler);
     $('#start-button').click(startButtonHandler);
+
+    if (!intervalId) {
+      intervalId = setInterval(intervalHandler, 1000);
+    }
     state=sAwaitingStart;
   }
 
