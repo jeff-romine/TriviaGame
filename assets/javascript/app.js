@@ -2,24 +2,30 @@ $(document).ready(function () {
 
   var questions = [
     {
-      timeLimitInSeconds: 10,
+      timeLimitInSeconds: 13,
       questionText: "Who was the only female member of the Grateful Dead?",
-      answers: ["Linda Ronstadt", "Donna Jean Godchaux", "Janis Joplin"],
+      answers: ["Linda Ronstadt", "Donna Jean Godchaux", "Janis Joplin","Karen Carpenter"],
       correctAnswer: "Donna Jean Godchaux",
       explanationText: "Donna Jean Godchaux provided back-up and lead vocals for the band from 1971 to 1979."
     },
     {
-      timeLimitInSeconds: 15,
-      questionText: "Jerry's last name is what?",
-      answers: ["Garcia", "Godchaux", "Weir"],
-      correctAnswer: "Garcia",
-      explanationText: "Donna Jean Godchaux provided back-up and lead vocals for the band from 1971 to 1979."
+      timeLimitInSeconds: 20,
+      questionText: "What were the Grateful Dead called before they were called the Grateful Dead?",
+      answers: ["The Warlocks", "The Birds", "The Animals","The Airplane"],
+      correctAnswer: "The Warlocks",
+      explanationText: "Members of the Grateful Dead played in \"The Warlocks\" and \"Mother McCree's Uptown Jug Champions\"."
+    },
+    {
+      timeLimitInSeconds: 10,
+      questionText: "What instrument did Jerry Garcia play before switching to guitar?",
+      answers: ["Clarinet", "Fiddle", "Banjo","Piano","Trumpet"],
+      correctAnswer: "Banjo",
+      explanationText: "Jerry Garcia became a very accomplished Bluegrass banjo player before taking up the guitar"
     }
   ];
 
   /* All of these variables need to be properly initialized in init() */
   var state;
-  var started;
   var questionIndex;
   var timeLimitInSeconds;
   var questionActive;
@@ -30,7 +36,6 @@ $(document).ready(function () {
   function sAwaitingStart(event) {
     $(".awaiting-start").hide();
     $(".active-game").show();
-    started = true;
     return tNextQuestion();
   }
 
@@ -168,29 +173,33 @@ $(document).ready(function () {
 
   $('#submit-or-next').click(handleSubmitOrNext);
 
-  $('#start-button').click((event) => {
+
+  $('#try-again').click(function () {
+    init();
+  });
+
+  function startButtonHandler(event) {
     state = state(event);
-    });
-
-  function clickHandler(event) {
-    console.log("clickHandler(",event,")");
   }
-
-  $("body").click(clickHandler);
 
   function init() {
 
     $(".active-game").hide();
     $(".game-over").hide();
     $(".init").show();
-    started = false;
+    $(".awaiting-start").show();
     questionIndex=0;
     questionActive=false;
     correctAnswers=0;
+    selectedAnswer=undefined;
+    currentQuestion=undefined;
 
-    state=sAwaitingStart;
 
+    clearInterval(intervalHandler);
     setInterval(intervalHandler,1000);
+    $('#start-button').unbind("click",startButtonHandler);
+    $('#start-button').click(startButtonHandler);
+    state=sAwaitingStart;
   }
 
   init();
